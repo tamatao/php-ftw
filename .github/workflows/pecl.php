@@ -3,6 +3,7 @@
 list($version, $arch, $ts, $extension) = array_slice($argv, 1);
 
 $versions = [
+    "5.2" => "vc6",
     "7.4" => "vc15",
     "8.0" => "vs16",
     "8.1" => "vs16",
