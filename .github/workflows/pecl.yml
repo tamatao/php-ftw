@@ -8,6 +8,14 @@ on:
       version:
         description: 'PECL extension version to build'
         required: true
+      php_version:
+        description: 'PHP Version'
+        required: true
+        default: "['7.4']"
+      php_arch:
+        description: 'PHP Arch'
+        required: true
+        default: "['x64']"
 defaults:
   run:
     shell: cmd
@@ -17,9 +25,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['8.2', '8.1', '8.0']
-        arch: [x64, x86]
-        ts: [nts, ts]
+        version: ${{ fromJSON(github.event.inputs.php_version) }}
+        arch: ${{ fromJSON(github.event.inputs.php_arch) }}
+        ts: [nts]
     runs-on: windows-2019
     steps:
       - name: Checkout php-ftw
