@@ -21,18 +21,14 @@ file_put_contents(getenv("GITHUB_OUTPUT"), "config={$ini[$extension]['config']}\
 
 if (array_key_exists("libs", $ini[$extension])) {
     $libs = $ini[$extension]["libs"];
-} else {
-    $libs = "''";
+    file_put_contents(getenv("GITHUB_OUTPUT"), "libs={$libs}\n", FILE_APPEND);
 }
-file_put_contents(getenv("GITHUB_OUTPUT"), "libs={$libs}\n", FILE_APPEND);
 
 // work around missing possibility to install PECL dependencies
 if (array_key_exists("pecl_libs", $ini[$extension])) {
     $libs = $ini[$extension]["pecl_libs"];
-} else {
-    $libs = "''";
+    file_put_contents("./pecl_libs.csv", explode("\n", $libs));
 }
-file_put_contents("./pecl_libs.csv", explode("\n", $libs));
 
 if (array_key_exists("exts", $ini[$extension])) {
     $lines = [];
@@ -60,8 +56,11 @@ $docs = array_map(
     },
     $sxe->xpath("//p:file[@role='doc']")
 );
-$docs = implode(" ", $docs);
-file_put_contents(getenv("GITHUB_OUTPUT"), "docs={$docs}\n", FILE_APPEND);
+
+if(count($docs)) {
+    $docs = implode(" ", $docs);
+    file_put_contents(getenv("GITHUB_OUTPUT"), "docs={$docs}\n", FILE_APPEND);
+}
 
 $builddir = "";
 if ($arch === "x64") {
